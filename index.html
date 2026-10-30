@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nest Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* --u = 1% del ancho de una pantalla 1024×600, encajada en la ventana */
+  :root { --u: min(1vw, 1.7067vh);
+    --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+    --body: "Figtree", Roboto, system-ui, sans-serif;
+    --mono: "JetBrains Mono", "Roboto Mono", monospace; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #05070f; color: #fff; font-family: var(--body); cursor: none; }
+  .screen { position: absolute; inset: 0; }
+  .sky { position: absolute; inset: 0; transition: background 60s linear; }
+  .sun { position: absolute; width: calc(14 * var(--u)); height: calc(14 * var(--u)); border-radius: 50%; filter: blur(calc(2.2 * var(--u))); opacity: .55; transition: all 60s linear; }
+  .scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,8,20,.38), rgba(5,8,20,.12) 60%, rgba(5,8,20,.28)); transition: background 2s ease; }
+
+  .day { position: absolute; inset: 0; display: grid; grid-template-columns: 1.15fr 1fr; gap: calc(3 * var(--u)); padding: calc(4.2 * var(--u)) calc(4.6 * var(--u)); transition: opacity 2s ease; }
+  .left { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+  .clock { font-family: var(--display); font-weight: 300; font-size: calc(15.5 * var(--u)); line-height: .9; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+  .date { font-size: calc(2.7 * var(--u)); font-weight: 500; opacity: .9; margin-top: calc(1.2 * var(--u)); }
+  .rain { display: inline-flex; align-items: center; gap: var(--u); margin-top: calc(1.6 * var(--u)); padding: calc(.7 * var(--u)) calc(1.6 * var(--u));
+    border-radius: 99px; background: rgba(127,178,255,.22); border: 1px solid rgba(127,178,255,.45); font-size: calc(1.9 * var(--u)); font-weight: 600; }
+  .rain svg { width: calc(2.6 * var(--u)); height: calc(2.6 * var(--u)); }
+  .rain[hidden] { display: none; }
+  .now { display: flex; align-items: center; gap: calc(2 * var(--u)); }
+  .now svg { width: calc(7.5 * var(--u)); height: calc(7.5 * var(--u)); flex: none; }
+  .now .temp { font-family: var(--display); font-size: calc(7 * var(--u)); font-weight: 500; line-height: 1; }
+  .now .cond { font-size: calc(2.1 * var(--u)); opacity: .85; line-height: 1.35; }
+  .hours { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--u); margin-top: calc(2.2 * var(--u)); }
+  .hour { display: flex; flex-direction: column; align-items: center; gap: calc(.5 * var(--u)); font-size: calc(1.7 * var(--u)); padding: var(--u) 0; border-radius: calc(1.4 * var(--u)); background: rgba(255,255,255,.1); font-variant-numeric: tabular-nums; }
+  .hour svg { width: calc(3.4 * var(--u)); height: calc(3.4 * var(--u)); }
+  .hour b { font-weight: 600; font-size: calc(2 * var(--u)); }
+
+  .right { display: flex; flex-direction: column; gap: calc(1.6 * var(--u)); min-width: 0; padding: calc(2.4 * var(--u)); border-radius: calc(2.4 * var(--u));
+    background: rgba(8,12,28,.4); border: 1px solid rgba(255,255,255,.12); overflow: hidden; }
+  .right h3 { margin: 0; font-family: var(--mono); font-weight: 500; font-size: calc(1.45 * var(--u)); letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+  .list { display: flex; flex-direction: column; gap: calc(1.4 * var(--u)); }
+  .ev { display: grid; grid-template-columns: calc(9 * var(--u)) 1fr; column-gap: calc(1.4 * var(--u)); align-items: baseline; }
+  .ev time { font-family: var(--mono); font-size: calc(1.8 * var(--u)); opacity: .85; font-variant-numeric: tabular-nums; }
+  .ev .t { font-size: calc(2.15 * var(--u)); font-weight: 600; line-height: 1.2; display: flex; align-items: center; gap: var(--u); min-width: 0; }
+  .ev .t span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ev .t i { width: calc(1.1 * var(--u)); height: calc(1.1 * var(--u)); border-radius: 50%; flex: none; }
+  .ev .s { grid-column: 2; font-size: calc(1.6 * var(--u)); opacity: .7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ev.past { opacity: .45; }
+  .empty { font-size: calc(1.9 * var(--u)); opacity: .6; }
+  .sep { height: 1px; background: rgba(255,255,255,.14); flex: none; }
+  .foot { margin-top: auto; font-size: calc(1.6 * var(--u)); opacity: .6; display: flex; flex-wrap: wrap; column-gap: calc(2 * var(--u)); row-gap: calc(.6 * var(--u)); font-variant-numeric: tabular-nums; }
+  .foot span:first-child { opacity: 1; font-weight: 600; }
+
+  .night { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(1.6 * var(--u)); opacity: 0; transition: opacity 2s ease; }
+  .night .clock { font-size: calc(19 * var(--u)); color: #d39258; }
+  .night .meta { display: flex; gap: calc(3 * var(--u)); font-size: calc(2 * var(--u)); color: #8e6748; font-variant-numeric: tabular-nums; }
+  .screen.is-night .night { opacity: 1; }
+  .screen.is-night .day, .screen.is-night .sun { opacity: 0; }
+  .screen.is-night .scrim { background: #000; }
+</style>
+</head>
+<body>
+<div class="screen" id="screen">
+  <div class="sky" id="sky"></div>
+  <div class="sun" id="sun"></div>
+  <div class="scrim"></div>
+
+  <div class="day">
+    <div class="left">
+      <div>
+        <div class="clock" id="clock">--:--</div>
+        <div class="date" id="date"></div>
+        <div class="rain" id="rain" hidden></div>
+      </div>
+      <div>
+        <div class="now">
+          <svg viewBox="0 0 48 48" id="nowIcon"></svg>
+          <div>
+            <div class="temp" id="nowTemp">--°</div>
+            <div class="cond" id="nowCond">Cargando el tiempo…</div>
+          </div>
+        </div>
+        <div class="hours" id="hours"></div>
+      </div>
+    </div>
+    <div class="right">
+      <h3>Hoy</h3>
+      <div class="list" id="today"></div>
+      <div class="sep"></div>
+      <h3>Mañana</h3>
+      <div class="list" id="tomorrow"></div>
+      <div class="foot" id="sunFoot"></div>
+    </div>
+  </div>
+
+  <div class="night">
+    <div class="clock" id="nclock">--:--</div>
+    <div class="meta" id="nmeta"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  // Todo lo personal se lee de config.json (ver config.example.json)
+  let NAME = '', LAT = 0, LON = 0, TZ = 'Europe/Madrid';
+  let NIGHT_ON = 23 * 60, NIGHT_OFF = 7 * 60;
+  // Alarmas del Nest Hub (Google no deja leerlas, se apuntan en config.json).
+  // days: 0 = domingo … 6 = sábado
+  let ALARMS = [];
+  const toMin = (s) => { const [h, m] = s.split(':').map(Number); return h * 60 + m; };
+  function applyConfig(c) {
+    NAME = c.nombre || '';
+    LAT = c.ciudad.lat; LON = c.ciudad.lon; TZ = c.ciudad.zona || TZ;
+    if (c.modo_noche) { NIGHT_ON = toMin(c.modo_noche.desde); NIGHT_OFF = toMin(c.modo_noche.hasta); }
+    ALARMS = (c.alarmas || []).map(a => ({ days: a.dias, time: a.hora }));
+    if (c.nest_hub) document.title = c.nest_hub;
+  }
+
+  const ICON = {
+    sun: '<circle cx="24" cy="24" r="9" fill="#ffd36b"/><g stroke="#ffd36b" stroke-width="3" stroke-linecap="round"><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M9.9 38.1l4.2-4.2M33.9 14.1l4.2-4.2"/></g>',
+    partly: '<circle cx="18" cy="18" r="8" fill="#ffd36b"/><path d="M15 38h20a8 8 0 0 0 0-16 11 11 0 0 0-21 3 6.5 6.5 0 0 0 1 13z" fill="#f2f4fa"/>',
+    cloud: '<path d="M13 38h22a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 38z" fill="#e3e7f2"/>',
+    fog: '<g stroke="#e3e7f2" stroke-width="3.5" stroke-linecap="round"><path d="M8 18h32M6 26h36M10 34h28"/></g>',
+    rain: '<path d="M13 30h22a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 30z" fill="#d5dbea"/><g stroke="#7fb2ff" stroke-width="3" stroke-linecap="round"><path d="M16 35l-2 6M24 35l-2 6M32 35l-2 6"/></g>',
+    snow: '<path d="M13 30h22a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 30z" fill="#e3e7f2"/><g fill="#fff"><circle cx="16" cy="38" r="2"/><circle cx="24" cy="41" r="2"/><circle cx="32" cy="38" r="2"/></g>',
+    storm: '<path d="M13 28h22a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 28z" fill="#b9c0d3"/><path d="M25 30l-6 9h6l-3 7 9-11h-6l3-5z" fill="#ffd36b"/>',
+    moon: '<path d="M30 8a16 16 0 1 0 10 26A13 13 0 0 1 30 8z" fill="#e8e2c8"/>',
+    moonCloud: '<path d="M26 6a13 13 0 1 0 8 21A10.5 10.5 0 0 1 26 6z" fill="#e8e2c8"/><path d="M17 42h18a7 7 0 0 0 0-14 9.5 9.5 0 0 0-18 3 5.6 5.6 0 0 0 0 11z" fill="#c9cfdf"/>'
+  };
+
+  // Códigos WMO de Open-Meteo
+  function describe(code, isDay) {
+    if (code === 0) return [isDay ? 'sun' : 'moon', 'Despejado'];
+    if (code <= 2) return [isDay ? 'partly' : 'moonCloud', code === 1 ? 'Casi despejado' : 'Parcialmente nuboso'];
+    if (code === 3) return ['cloud', 'Nublado'];
+    if (code <= 48) return ['fog', 'Niebla'];
+    if (code <= 57) return ['rain', 'Llovizna'];
+    if (code <= 67) return ['rain', 'Lluvia'];
+    if (code <= 77) return ['snow', 'Nieve'];
+    if (code <= 82) return ['rain', 'Chubascos'];
+    if (code <= 86) return ['snow', 'Chubascos de nieve'];
+    return ['storm', 'Tormenta'];
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const pad = (n) => String(n).padStart(2, '0');
+  const hm = (d) => pad(d.getHours()) + ':' + pad(d.getMinutes());
+  const mins = (d) => d.getHours() * 60 + d.getMinutes();
+  const esc = (s) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  let weather = null, events = [];
+  // Valores por defecto (finales de octubre) hasta que llegue el tiempo
+  let sunrise = 7 * 60 + 52, sunset = 18 * 60 + 12;
+
+  // ---------- Cielo ----------
+  const hex = (h) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const mix = (a, b, t) => { const A = hex(a), B = hex(b); return 'rgb(' + A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(',') + ')'; };
+  function skyAt(m) {
+    const noon = (sunrise + sunset) / 2;
+    const stops = [
+      [0, '#05070f', '#0b1024', '#0b1024'],
+      [sunrise - 70, '#0b1030', '#1d1e48', '#30234f'],
+      [sunrise - 15, '#2b2a64', '#e0866a', '#ff9c6b'],
+      [sunrise + 60, '#5b8fd6', '#f2c79a', '#ffd38a'],
+      [noon, '#3f7fd0', '#9fd0f2', '#fff2c4'],
+      [sunset - 60, '#4a6fc0', '#f0b072', '#ffb35c'],
+      [sunset, '#3a3375', '#e0725a', '#ff7a4f'],
+      [sunset + 50, '#141838', '#3b2b5c', '#4a2c5a'],
+      [sunset + 120, '#070a1a', '#0f1430', '#0f1430'],
+      [1440, '#05070f', '#0b1024', '#0b1024']
+    ];
+    for (let i = 0; i < stops.length - 1; i++) {
+      const [a, t1, b1, s1] = stops[i], [b, t2, b2, s2] = stops[i + 1];
+      if (m >= a && m <= b) { const t = (m - a) / (b - a || 1); return [mix(t1, t2, t), mix(b1, b2, t), mix(s1, s2, t)]; }
+    }
+    return [stops[0][1], stops[0][2], stops[0][3]];
+  }
+
+  // ---------- Calendario ----------
+  function cleanTitle(e) {
+    let t = e.title;
+    const b = t.match(/^(.*?)(?:’|')s Birthday$/);
+    if (b) t = 'Cumpleaños de ' + b[1];
+    return t.replace(/\s*\([^)]*\)/g, '').trim();
+  }
+  function renderList(el, list, now) {
+    if (!list.length) { el.innerHTML = '<div class="empty">Sin planes</div>'; return; }
+    el.innerHTML = list.slice(0, 4).map(e => {
+      const s = new Date(e.start), en = new Date(e.end);
+      const time = e.allDay ? 'Todo el día' : hm(s);
+      const sub = [e.allDay ? '' : hm(s) + '–' + hm(en), e.location].filter(Boolean).join(' · ') || e.calendar;
+      const past = !e.allDay && en < now;
+      return `<div class="ev${past ? ' past' : ''}"><time>${e.allDay ? '' : time}</time>` +
+        `<div class="t"><i style="background:${e.color}"></i><span>${esc(cleanTitle(e))}</span></div>` +
+        `<div class="s">${esc(e.allDay ? 'Todo el día · ' + e.calendar : sub)}</div></div>`;
+    }).join('');
+  }
+  function eventsOn(day) {
+    const a = new Date(day); a.setHours(0, 0, 0, 0);
+    const b = new Date(a); b.setDate(b.getDate() + 1);
+    return events.filter(e => new Date(e.start) < b && new Date(e.end) > a)
+      .sort((x, y) => (y.allDay - x.allDay) || (new Date(x.start) - new Date(y.start)));
+  }
+
+  // ---------- Alarma ----------
+  function nextAlarm(now) {
+    for (let add = 0; add < 8; add++) {
+      const d = new Date(now); d.setDate(d.getDate() + add);
+      const found = ALARMS
+        .filter(a => a.days.includes(d.getDay()))
+        .map(a => { const [h, m] = a.time.split(':').map(Number); const t = new Date(d); t.setHours(h, m, 0, 0); return t; })
+        .filter(t => t > now).sort((a, b) => a - b)[0];
+      if (found) {
+        const day = add === 0 ? 'hoy' : add === 1 ? 'mañana' : found.toLocaleDateString('es-ES', { weekday: 'long' });
+        return `${day} ${hm(found)}`;
+      }
+    }
+    return '';
+  }
+  // Modo despertar: de 30 min antes a 30 min después de una alarma de hoy.
+  // Devuelve el progreso del amanecer artificial (0 → 1) o null.
+  function wakeProgress(now) {
+    const m = mins(now);
+    for (const a of ALARMS) {
+      if (!a.days.includes(now.getDay())) continue;
+      const [h, mm] = a.time.split(':').map(Number), at = h * 60 + mm;
+      if (m >= at - 30 && m < at + 30) return Math.min(1, (m - (at - 30)) / 30);
+    }
+    return null;
+  }
+  function wakeSky(t) {
+    const stops = [[0, '#0b1030', '#1d1e48', '#30234f'], [.5, '#2b2a64', '#e0866a', '#ff9c6b'], [1, '#5b8fd6', '#f2c79a', '#ffd38a']];
+    const i = t < .5 ? 0 : 1, k = (t - stops[i][0]) / .5;
+    return [1, 2, 3].map(j => mix(stops[i][j], stops[i + 1][j], k));
+  }
+
+  // Aviso de lluvia en las próximas 12 horas
+  const UMBRELLA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 0 1 18 0zM12 12v7a2 2 0 0 0 4 0"/></svg>';
+  function rainNotice(now) {
+    if (!weather) return '';
+    const code = weather.current.weather_code;
+    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82) || code >= 95) return 'Está lloviendo ahora';
+    const h = weather.hourly, limit = now.getTime() + 12 * 3600e3;
+    for (let i = 0; i < h.time.length; i++) {
+      const t = new Date(h.time[i]);
+      if (t <= now || t.getTime() > limit) continue;
+      const p = h.precipitation_probability[i], mm = h.precipitation[i];
+      if (p >= 50 || mm >= 0.3) {
+        const day = t.getDate() === now.getDate() ? '' : 'mañana ';
+        return `Lluvia ${day}hacia las ${pad(t.getHours())}:00 · ${p} %, coge paraguas`;
+      }
+    }
+    return '';
+  }
+
+  const BELL ='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:1.2em;height:1.2em;vertical-align:-.22em;margin-right:.35em"><circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 2M5 4 3 6M19 4l2 2"/></svg>';
+
+  // ---------- Pintar ----------
+  function render() {
+    const now = new Date(), m = mins(now);
+    const wake = wakeProgress(now);
+    const s = $('sun');
+    let top, bottom, sunColor;
+    if (wake !== null) {
+      // Amanecer artificial: el resplandor sube desde abajo hasta la alarma
+      [top, bottom, sunColor] = wakeSky(wake);
+      s.style.opacity = .3 + .4 * wake;
+      s.style.left = '43%';
+      s.style.top = (85 - 45 * wake) + '%';
+    } else {
+      [top, bottom, sunColor] = skyAt(m);
+      const f = (m - sunrise) / (sunset - sunrise), c = Math.min(1, Math.max(0, f));
+      s.style.opacity = (f >= -0.08 && f <= 1.08) ? .55 : 0;
+      s.style.left = (8 + 76 * c) + '%';
+      s.style.top = (70 - 60 * Math.sin(Math.PI * c)) + '%';
+    }
+    $('sky').style.background = `linear-gradient(180deg, ${top} 0%, ${bottom} 100%)`;
+    s.style.background = sunColor;
+
+    const t = hm(now);
+    $('clock').textContent = t; $('nclock').textContent = t;
+    let d = now.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+    d = d.charAt(0).toUpperCase() + d.slice(1);
+    $('date').textContent = wake !== null ? `Buenos días${NAME ? ', ' + NAME : ''} · ${d}` : d;
+    $('screen').classList.toggle('is-night', wake === null && (m >= NIGHT_ON || m < NIGHT_OFF));
+
+    const rain = rainNotice(now);
+    $('rain').hidden = !rain;
+    $('rain').innerHTML = rain ? UMBRELLA + rain : '';
+
+    const alarm = nextAlarm(now);
+    const alarmHtml = alarm ? `<span>${BELL}Alarma ${alarm}</span>` : '';
+    $('sunFoot').innerHTML = alarmHtml +
+      `<span>Amanece ${pad(Math.floor(sunrise / 60))}:${pad(sunrise % 60)}</span><span>Anochece ${pad(Math.floor(sunset / 60))}:${pad(sunset % 60)}</span>`;
+    let nmeta = alarmHtml;
+
+    renderList($('today'), eventsOn(now), now);
+    const tm = new Date(now); tm.setDate(tm.getDate() + 1);
+    renderList($('tomorrow'), eventsOn(tm), now);
+
+    if (weather) {
+      const cur = weather.current;
+      const [icon, label] = describe(cur.weather_code, cur.is_day);
+      $('nowIcon').innerHTML = ICON[icon];
+      $('nowTemp').textContent = Math.round(cur.temperature_2m) + '°';
+      $('nowCond').innerHTML = `${label}<br>Máx ${Math.round(weather.daily.temperature_2m_max[0])}° · Mín ${Math.round(weather.daily.temperature_2m_min[0])}°`;
+      const h = weather.hourly, startH = new Date(now); startH.setMinutes(0, 0, 0);
+      let html = '', shown = 0;
+      for (let i = 0; i < h.time.length && shown < 5; i++) {
+        const ht = new Date(h.time[i]);
+        if (ht <= startH) continue;
+        const [hi] = describe(h.weather_code[i], h.is_day[i]);
+        html += `<div class="hour"><span>${pad(ht.getHours())}h</span><svg viewBox="0 0 48 48">${ICON[hi]}</svg><b>${Math.round(h.temperature_2m[i])}°</b></div>`;
+        shown++;
+      }
+      $('hours').innerHTML = html;
+      const tmr = describe(weather.daily.weather_code[1], 1)[1].toLowerCase();
+      nmeta += `<span>${Math.round(cur.temperature_2m)}° ahora</span><span>Mañana ${Math.round(weather.daily.temperature_2m_max[1])}° · ${tmr}</span>`;
+    }
+    $('nmeta').innerHTML = nmeta;
+  }
+
+  // ---------- Datos ----------
+  async function loadWeather() {
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
+        '&current=temperature_2m,weather_code,is_day&hourly=temperature_2m,weather_code,is_day,precipitation_probability,precipitation' +
+        '&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,weather_code&timezone=' + encodeURIComponent(TZ) + '&forecast_days=2';
+      weather = await (await fetch(url)).json();
+      sunrise = mins(new Date(weather.daily.sunrise[0]));
+      sunset = mins(new Date(weather.daily.sunset[0]));
+      render();
+    } catch (e) { /* sin red: se reintenta en el siguiente ciclo */ }
+  }
+  async function loadEvents() {
+    try {
+      const data = await (await fetch('eventos.json?t=' + Date.now())).json();
+      events = data.events || [];
+      render();
+    } catch (e) { /* se reintenta */ }
+  }
+
+  async function start() {
+    try {
+      applyConfig(await (await fetch('config.json?t=' + Date.now())).json());
+    } catch (e) {
+      $('nowCond').textContent = 'Falta config.json (copia config.example.json)';
+    }
+    render();
+    loadWeather(); loadEvents();
+  }
+
+  start();
+  setInterval(render, 15 * 1000);
+  setInterval(loadWeather, 15 * 60 * 1000);
+  setInterval(loadEvents, 5 * 60 * 1000);
+  // Recarga completa cada 6 h para coger cambios en la página
+  setTimeout(() => location.reload(), 6 * 60 * 60 * 1000);
+})();
+</script>
+</body>
+</html>

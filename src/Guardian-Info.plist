@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleIdentifier</key><string>com.nesthub.guardian</string>
+  <key>CFBundleName</key><string>Nest Hub Guardián</string>
+  <key>NSLocalNetworkUsageDescription</key><string>Para enviar tu pantalla al Nest Hub de tu cuarto.</string>
+  <key>NSCalendarsFullAccessUsageDescription</key><string>Para mostrar tus planes de hoy y mañana en el Nest Hub.</string>
+</dict>
+</plist>

@@ -1,0 +1,361 @@
+<title>Nest Hub Screen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una sola columna; arriba la pantalla del Nest Hub a escala con el control de hora, debajo qué muestra y de dónde sale cada dato. */
+:root {
+  --bg: #eef0f4;
+  --fg: #171b26;
+  --muted: #5b6375;
+  --line: #d5d9e2;
+  --panel: #ffffff;
+  --accent: #3d5bd9;
+  --bezel: #1c1f27;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Figtree", -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1218; --fg: #e9ecf3; --muted: #9aa3b5; --line: #262c38; --panel: #171b24; --accent: #8ea2ff; --bezel: #050608; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0f1218; --fg: #e9ecf3; --muted: #9aa3b5; --line: #262c38; --panel: #171b24; --accent: #8ea2ff; --bezel: #050608; color-scheme: dark }
+
+html, body { background: var(--bg); color: var(--fg); }
+body { font-family: var(--body); font-size: 16px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px; }
+.page { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+
+header { display: flex; flex-direction: column; gap: 8px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.02em; }
+.lede { color: var(--muted); max-width: 62ch; margin: 0; }
+
+/* ---------- Dispositivo ---------- */
+.device { display: flex; flex-direction: column; gap: 16px; }
+.bezel { background: var(--bezel); border-radius: 22px; padding: clamp(10px, 2.4vw, 26px); box-shadow: 0 30px 60px -30px rgba(10,14,30,.55); }
+.screen { position: relative; aspect-ratio: 1024 / 600; max-width: 100%; border-radius: 6px; overflow: hidden;
+  container-type: inline-size; color: #fff; font-family: var(--body); background: #0b0f20; }
+.sky { position: absolute; inset: 0; transition: background 1.2s ease; }
+.sun { position: absolute; width: 14cqw; height: 14cqw; border-radius: 50%; filter: blur(2.2cqw); opacity: .55; transition: left 1.2s ease, top 1.2s ease, background 1.2s ease, opacity 1.2s ease; }
+.scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,8,20,.38), rgba(5,8,20,.12) 60%, rgba(5,8,20,.28)); }
+
+.day { position: absolute; inset: 0; display: grid; grid-template-columns: 1.15fr 1fr; gap: 3cqw; padding: 4.2cqw 4.6cqw; transition: opacity .8s ease; }
+.left { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+.clock { font-family: var(--display); font-weight: 300; font-size: 15.5cqw; line-height: .9; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.date { font-size: 2.7cqw; font-weight: 500; opacity: .9; margin-top: 1.2cqw; text-transform: capitalize; }
+.now { display: flex; align-items: center; gap: 2cqw; }
+.now svg { width: 7.5cqw; height: 7.5cqw; flex: none; }
+.now .temp { font-family: var(--display); font-size: 7cqw; font-weight: 500; line-height: 1; }
+.now .cond { font-size: 2.1cqw; opacity: .85; line-height: 1.35; }
+.hours { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1cqw; margin-top: 2.2cqw; }
+.hour { display: flex; flex-direction: column; align-items: center; gap: .5cqw; font-size: 1.7cqw; padding: 1cqw 0; border-radius: 1.4cqw; background: rgba(255,255,255,.1); font-variant-numeric: tabular-nums; }
+.hour svg { width: 3.4cqw; height: 3.4cqw; }
+.hour b { font-weight: 600; font-size: 2cqw; }
+
+.right { display: flex; flex-direction: column; gap: 1.6cqw; min-width: 0; padding: 2.4cqw; border-radius: 2.4cqw;
+  background: rgba(8,12,28,.34); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.12); }
+.right h3 { margin: 0; font-family: var(--mono); font-weight: 500; font-size: 1.45cqw; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+.ev { display: grid; grid-template-columns: 9cqw 1fr; gap: 1.4cqw; align-items: baseline; }
+.ev time { font-family: var(--mono); font-size: 1.8cqw; opacity: .85; font-variant-numeric: tabular-nums; }
+.ev .t { font-size: 2.15cqw; font-weight: 600; line-height: 1.2; display: flex; align-items: center; gap: 1cqw; }
+.ev .t i { width: 1.1cqw; height: 1.1cqw; border-radius: 50%; flex: none; }
+.ev .s { grid-column: 2; font-size: 1.6cqw; opacity: .7; margin-top: -.6cqw; }
+.ev.past { opacity: .45; }
+.sep { height: 1px; background: rgba(255,255,255,.14); }
+.alarm { margin-top: auto; display: flex; align-items: center; gap: 1.2cqw; font-size: 1.8cqw; opacity: .85; }
+.alarm svg { width: 2.4cqw; height: 2.4cqw; }
+
+.rain { display: inline-flex; align-items: center; gap: 1cqw; margin-top: 1.6cqw; padding: .7cqw 1.6cqw; border-radius: 99px;
+  background: rgba(127,178,255,.22); border: 1px solid rgba(127,178,255,.45); font-size: 1.9cqw; font-weight: 600; }
+.rain svg { width: 2.6cqw; height: 2.6cqw; }
+.rain[hidden] { display: none; }
+.list { display: flex; flex-direction: column; gap: 1.4cqw; }
+.foot { margin-top: auto; font-size: 1.6cqw; opacity: .6; display: flex; flex-wrap: wrap; column-gap: 2cqw; row-gap: .6cqw; font-variant-numeric: tabular-nums; }
+.foot span:first-child { opacity: 1; font-weight: 600; }
+.bell { width: 1.2em; height: 1.2em; vertical-align: -.22em; margin-right: .35em; }
+.night { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.6cqw; color: #c98a52; opacity: 0; transition: opacity .8s ease; }
+.night .clock { font-size: 19cqw; font-weight: 300; color: #d39258; }
+.night .meta { display: flex; gap: 3cqw; font-size: 2cqw; color: #8e6748; font-variant-numeric: tabular-nums; }
+.screen.is-night .night { opacity: 1; }
+.screen.is-night .day { opacity: 0; }
+.screen.is-night .scrim { background: #000; }
+
+.badge { position: absolute; right: 1.6cqw; bottom: 1.4cqw; font-family: var(--mono); font-size: 1.2cqw; padding: .3cqw .9cqw; border-radius: 99px; background: rgba(0,0,0,.35); color: rgba(255,255,255,.75); }
+
+/* Control de hora */
+.control { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; }
+.control label { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.control output { font-family: var(--mono); font-size: 15px; font-variant-numeric: tabular-nums; min-width: 6.5ch; text-align: right; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+input[type=range]:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.modes { display: flex; flex-wrap: wrap; gap: 8px; }
+.modes button { font: 500 13px var(--body); color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; cursor: pointer; }
+.modes button:hover { border-color: var(--accent); color: var(--accent); }
+.modes button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.hint { font-size: 14px; color: var(--muted); margin: 0; }
+
+/* Secciones */
+section { display: flex; flex-direction: column; gap: 16px; }
+h2 { font-family: var(--display); font-weight: 500; font-size: 24px; margin: 0; letter-spacing: -.01em; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.mod { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.mod h4 { margin: 0; font-size: 16px; font-weight: 600; }
+.mod p { margin: 0; color: var(--muted); font-size: 15px; }
+.src { font-family: var(--mono); font-size: 12px; color: var(--muted); border-top: 1px dashed var(--line); padding-top: 8px; margin-top: auto; }
+.pill { align-self: flex-start; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; }
+.ok { color: #1f8a5b; } .need { color: #b7701a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ok { color: #5fd39b; } :root:not([data-theme="light"]) .need { color: #f0b35e; } }
+:root[data-theme="dark"] .ok { color: #5fd39b; } :root[data-theme="dark"] .need { color: #f0b35e; }
+
+ol.steps { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px; max-width: 70ch; }
+ol.steps li::marker { font-family: var(--mono); color: var(--muted); }
+code { font-family: var(--mono); font-size: .88em; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; overflow-wrap: anywhere; }
+
+@media (max-width: 560px) {
+  .control { grid-template-columns: 1fr auto; }
+  .control label { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: reduce) { .sky, .sun, .day, .night { transition: none; } }
+</style>
+
+<div class="page">
+  <header>
+    <span class="eyebrow">Nest Hub · 1024 × 600 · datos de ejemplo</span>
+    <h1>Una pantalla para tu Nest Hub</h1>
+    <p class="lede">La hora, el tiempo, tu calendario del iPhone y la próxima alarma, sobre un fondo que sigue el color del cielo. De noche pasa a un reloj ámbar tenue, y antes de la alarma simula un amanecer.</p>
+  </header>
+
+  <div class="device">
+    <div class="bezel">
+      <div class="screen" id="screen">
+        <div class="sky" id="sky"></div>
+        <div class="sun" id="sun"></div>
+        <div class="scrim"></div>
+
+        <div class="day">
+          <div class="left">
+            <div>
+              <div class="clock" id="clock">--:--</div>
+              <div class="date" id="date">Viernes, 30 de octubre</div>
+              <div class="rain" id="rain" hidden></div>
+            </div>
+            <div>
+              <div class="now">
+                <svg viewBox="0 0 48 48" id="nowIcon"></svg>
+                <div>
+                  <div class="temp" id="nowTemp">17°</div>
+                  <div class="cond" id="nowCond">Parcialmente nuboso<br>Máx 19° · Mín 11°</div>
+                </div>
+              </div>
+              <div class="hours" id="hours"></div>
+            </div>
+          </div>
+          <div class="right">
+            <h3>Hoy</h3>
+            <div class="list" id="events"></div>
+            <div class="sep"></div>
+            <h3>Mañana</h3>
+            <div class="list">
+              <div class="ev"><time></time><div class="t"><i style="background:#f2b84b"></i>Cumpleaños de Laura</div><div class="s">Todo el día · Cumpleaños</div></div>
+            </div>
+            <div class="foot" id="foot"></div>
+          </div>
+        </div>
+
+        <div class="night">
+          <div class="clock" id="nclock">--:--</div>
+          <div class="meta" id="nmeta"></div>
+        </div>
+
+        <span class="badge">datos de ejemplo</span>
+      </div>
+    </div>
+
+    <div class="control">
+      <label for="hour">Simula la hora</label>
+      <input type="range" id="hour" min="0" max="1439" step="5">
+      <output id="hourOut" for="hour">--:--</output>
+    </div>
+    <div class="modes" role="group" aria-label="Saltar a un momento del día">
+      <button type="button" data-m="435">Despertar</button>
+      <button type="button" data-m="660">Mañana</button>
+      <button type="button" data-m="990">Aviso de lluvia</button>
+      <button type="button" data-m="1080">Atardecer</button>
+      <button type="button" data-m="1410">Noche</button>
+    </div>
+    <p class="hint">Mueve la barra para ver cómo cambia la pantalla a lo largo del día. En el ejemplo, la ciudad es Madrid a finales de octubre (amanece a las 07:55 y anochece a las 18:10), hay una alarma de lunes a viernes a las 07:30 y se espera lluvia de 17:00 a 19:00.</p>
+  </div>
+
+  <section>
+    <h2>Qué muestra y de dónde sale cada dato</h2>
+    <div class="grid">
+      <div class="mod">
+        <h4>Hora y fecha</h4>
+        <p>Reloj grande, legible desde la cama. De noche, en ámbar y con muy poco brillo.</p>
+        <div class="src">Fuente: el propio Nest Hub</div>
+      </div>
+      <div class="mod">
+        <h4>Tiempo y aviso de lluvia</h4>
+        <p>Temperatura actual, máxima, mínima y las próximas 5 horas. Si va a llover en las próximas 12 horas, sale un aviso debajo de la fecha.</p>
+        <div class="src">Fuente: Open-Meteo · gratis y sin cuenta</div>
+      </div>
+      <div class="mod">
+        <h4>Calendario del iPhone</h4>
+        <p>Los planes de hoy y de mañana, con el color de cada calendario. Los que ya han pasado se atenúan.</p>
+        <div class="src">Fuente: app Calendario del Mac · iCloud incluido, sin publicar enlaces</div>
+      </div>
+      <div class="mod">
+        <h4>Alarma y modo despertar</h4>
+        <p>Muestra la próxima alarma. Desde 30 minutos antes, el cielo simula un amanecer y sale «Buenos días».</p>
+        <div class="src">Fuente: config.json · Google no deja leer las alarmas del Nest Hub</div>
+      </div>
+      <div class="mod">
+        <h4>Cielo que sigue al sol</h4>
+        <p>El fondo pasa por amanecer, día, atardecer y noche con las horas reales de tu ciudad. De 23:00 a 07:00, modo noche.</p>
+        <div class="src">Fuente: horas de salida y puesta de sol de Open-Meteo</div>
+      </div>
+      <div class="mod">
+        <h4>No molesta</h4>
+        <p>Si el Nest Hub está con Spotify, YouTube o una alarma, no se toca. La pantalla vuelve sola tras unos minutos en reposo.</p>
+        <div class="src">Fuente: guardián en el Mac, comprueba cada minuto</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cómo se instala</h2>
+    <ol class="steps">
+      <li>Instala <strong>catt</strong> en el Mac: <code>brew install pipx &amp;&amp; pipx install catt</code>.</li>
+      <li>Clona el repositorio, copia <code>config.example.json</code> a <code>config.json</code> y pon tu nombre, tu ciudad, tus alarmas y el nombre del Nest Hub.</li>
+      <li>Ejecuta <code>./instalar.sh</code> y acepta los permisos de Calendario y Red local que pide macOS.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+(() => {
+  const SUNRISE = 7 * 60 + 55, SUNSET = 18 * 60 + 10, NIGHT_ON = 23 * 60, NIGHT_OFF = 7 * 60;
+  const ALARM = 7 * 60 + 30, NAME = 'Ana';           // ejemplo: alarma de lunes a viernes
+  const RAIN_FROM = 17 * 60, RAIN_TO = 19 * 60;      // ejemplo: lluvia de 17:00 a 19:00
+
+  const ICON = {
+    sun: '<circle cx="24" cy="24" r="9" fill="#ffd36b"/><g stroke="#ffd36b" stroke-width="3" stroke-linecap="round"><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M9.9 38.1l4.2-4.2M33.9 14.1l4.2-4.2"/></g>',
+    partly: '<circle cx="18" cy="18" r="8" fill="#ffd36b"/><path d="M15 38h20a8 8 0 0 0 0-16 11 11 0 0 0-21 3 6.5 6.5 0 0 0 1 13z" fill="#f2f4fa"/>',
+    cloud: '<path d="M13 38h22a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 38z" fill="#e3e7f2"/>',
+    rain: '<path d="M13 30h22a9 9 0 0 0 0-18 12 12 0 0 0-23 3.5A7.3 7.3 0 0 0 13 30z" fill="#d5dbea"/><g stroke="#7fb2ff" stroke-width="3" stroke-linecap="round"><path d="M16 35l-2 6M24 35l-2 6M32 35l-2 6"/></g>',
+    moon: '<path d="M30 8a16 16 0 1 0 10 26A13 13 0 0 1 30 8z" fill="#e8e2c8"/>',
+    moonCloud: '<path d="M26 6a13 13 0 1 0 8 21A10.5 10.5 0 0 1 26 6z" fill="#e8e2c8"/><path d="M17 42h18a7 7 0 0 0 0-14 9.5 9.5 0 0 0-18 3 5.6 5.6 0 0 0 0 11z" fill="#c9cfdf"/>'
+  };
+  const UMBRELLA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 0 1 18 0zM12 12v7a2 2 0 0 0 4 0"/></svg>';
+  const BELL = '<svg class="bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 2M5 4 3 6M19 4l2 2"/></svg>';
+
+  const EVENTS = [
+    { end: 10 * 60 + 30, time: '09:30', title: 'Dentista', sub: '09:30–10:30 · Clínica Ortega', color: '#7fb2ff' },
+    { end: 19 * 60, time: '17:30', title: 'Pádel', sub: '17:30–19:00 · Pista 3', color: '#5fd39b' },
+    { end: 23 * 60, time: '21:00', title: 'Cena con la familia', sub: '21:00–23:00', color: '#ff8f7a' }
+  ];
+
+  // Colores del cielo [minuto del día, color arriba, color abajo, color del sol]
+  const STOPS = [
+    [0,    '#05070f', '#0b1024', '#0b1024'],
+    [SUNRISE - 70, '#0b1030', '#1d1e48', '#30234f'],
+    [SUNRISE - 15, '#2b2a64', '#e0866a', '#ff9c6b'],
+    [SUNRISE + 60, '#5b8fd6', '#f2c79a', '#ffd38a'],
+    [13 * 60, '#3f7fd0', '#9fd0f2', '#fff2c4'],
+    [SUNSET - 60, '#4a6fc0', '#f0b072', '#ffb35c'],
+    [SUNSET, '#3a3375', '#e0725a', '#ff7a4f'],
+    [SUNSET + 50, '#141838', '#3b2b5c', '#4a2c5a'],
+    [SUNSET + 120, '#070a1a', '#0f1430', '#0f1430'],
+    [1440, '#05070f', '#0b1024', '#0b1024']
+  ];
+
+  const hex = (h) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const mix = (a, b, t) => { const A = hex(a), B = hex(b); return 'rgb(' + A.map((v, i) => Math.round(v + (B[i] - v) * t)).join(',') + ')'; };
+  const fmt = (m) => String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+
+  function skyAt(m) {
+    for (let i = 0; i < STOPS.length - 1; i++) {
+      const [a, t1, b1, s1] = STOPS[i], [b, t2, b2, s2] = STOPS[i + 1];
+      if (m >= a && m <= b) { const t = (m - a) / (b - a || 1); return [mix(t1, t2, t), mix(b1, b2, t), mix(s1, s2, t)]; }
+    }
+    return [STOPS[0][1], STOPS[0][2], STOPS[0][3]];
+  }
+  // Amanecer artificial del modo despertar (t de 0 a 1)
+  function wakeSky(t) {
+    const st = [[0, '#0b1030', '#1d1e48', '#30234f'], [.5, '#2b2a64', '#e0866a', '#ff9c6b'], [1, '#5b8fd6', '#f2c79a', '#ffd38a']];
+    const i = t < .5 ? 0 : 1, k = (t - st[i][0]) / .5;
+    return [1, 2, 3].map(j => mix(st[i][j], st[i + 1][j], k));
+  }
+
+  function weatherAt(m) {
+    const h = m / 60;
+    const temp = Math.round(11 + 8 * Math.max(0, Math.sin(Math.PI * (h - 8) / 12)));
+    const dark = m < SUNRISE || m > SUNSET;
+    if (m >= RAIN_FROM && m < RAIN_TO) return { temp: temp - 2, icon: 'rain', cond: 'Lluvia' };
+    const cloudy = h >= 15 && h < 21;
+    return { temp, icon: dark ? (cloudy ? 'moonCloud' : 'moon') : (cloudy ? 'cloud' : (h < 12 ? 'sun' : 'partly')),
+      cond: dark ? (cloudy ? 'Nubes y claros' : 'Despejado') : (cloudy ? 'Nuboso' : (h < 12 ? 'Soleado' : 'Parcialmente nuboso')) };
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const screen = $('screen'), range = $('hour');
+
+  function render(m) {
+    const wake = (m >= ALARM - 30 && m < ALARM + 30) ? Math.min(1, (m - (ALARM - 30)) / 30) : null;
+    const s = $('sun');
+    let top, bottom, sun;
+    if (wake !== null) {
+      [top, bottom, sun] = wakeSky(wake);
+      s.style.opacity = .3 + .4 * wake; s.style.left = '43%'; s.style.top = (85 - 45 * wake) + '%';
+    } else {
+      [top, bottom, sun] = skyAt(m);
+      const f = (m - SUNRISE) / (SUNSET - SUNRISE), c = Math.min(1, Math.max(0, f));
+      s.style.opacity = (f >= -0.08 && f <= 1.08) ? .6 : 0;
+      s.style.left = (8 + 76 * c) + '%';
+      s.style.top = (70 - 60 * Math.sin(Math.PI * c)) + '%';
+    }
+    $('sky').style.background = `linear-gradient(180deg, ${top} 0%, ${bottom} 100%)`;
+    s.style.background = sun;
+
+    const t = fmt(m);
+    $('clock').textContent = t; $('nclock').textContent = t; $('hourOut').textContent = t;
+    $('date').textContent = (wake !== null ? `Buenos días, ${NAME} · ` : '') + 'Viernes, 30 de octubre';
+    screen.classList.toggle('is-night', wake === null && (m >= NIGHT_ON || m < NIGHT_OFF));
+
+    const rain = (m >= RAIN_FROM && m < RAIN_TO) ? 'Está lloviendo ahora'
+      : (m < RAIN_FROM && m >= RAIN_FROM - 12 * 60) ? 'Lluvia hacia las 17:00 · 70 %, coge paraguas' : '';
+    $('rain').hidden = !rain;
+    $('rain').innerHTML = rain ? UMBRELLA + rain : '';
+
+    const w = weatherAt(m);
+    $('nowIcon').innerHTML = ICON[w.icon];
+    $('nowTemp').textContent = w.temp + '°';
+    $('nowCond').innerHTML = w.cond + '<br>Máx 19° · Mín 11°';
+    let hours = '';
+    for (let i = 1; i <= 5; i++) {
+      const hm = (Math.floor(m / 60) + i) * 60 % 1440, hw = weatherAt(hm);
+      hours += `<div class="hour"><span>${String(hm / 60).padStart(2, '0')}h</span><svg viewBox="0 0 48 48">${ICON[hw.icon]}</svg><b>${hw.temp}°</b></div>`;
+    }
+    $('hours').innerHTML = hours;
+
+    $('events').innerHTML = EVENTS.map(e =>
+      `<div class="ev${m >= e.end ? ' past' : ''}"><time>${e.time}</time><div class="t"><i style="background:${e.color}"></i>${e.title}</div><div class="s">${e.sub}</div></div>`
+    ).join('');
+
+    // Viernes: la próxima alarma es hoy a las 07:30 o, si ya pasó, el lunes
+    const alarm = `<span>${BELL}Alarma ${m < ALARM ? 'hoy' : 'lunes'} 07:30</span>`;
+    $('foot').innerHTML = alarm + `<span>Amanece ${fmt(SUNRISE)}</span><span>Anochece ${fmt(SUNSET)}</span>`;
+    $('nmeta').innerHTML = alarm + `<span>${w.temp}° ahora</span><span>Mañana 20° · soleado</span>`;
+  }
+
+  const now = new Date();
+  range.value = now.getHours() * 60 + now.getMinutes() - (now.getMinutes() % 5);
+  range.addEventListener('input', () => render(+range.value));
+  document.querySelectorAll('.modes button').forEach(b => b.addEventListener('click', () => { range.value = b.dataset.m; render(+b.dataset.m); }));
+  render(+range.value);
+})();
+</script>

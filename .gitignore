@@ -1,0 +1,13 @@
+# Configuración personal (nombre, ciudad, alarmas…) y datos del calendario
+config.json
+eventos.json
+eventos.tmp
+# Registros
+*.log
+*.err
+# Binarios compilados (se generan desde src/ con instalar.sh)
+calendario
+guardian-launcher
+# Borradores locales
+preview.html
+guardian.new

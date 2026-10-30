@@ -1,0 +1,8 @@
+{
+  "nombre": "Ana",
+  "ciudad": { "nombre": "Madrid", "lat": 40.4168, "lon": -3.7038, "zona": "Europe/Madrid" },
+  "nest_hub": "Salón",
+  "modo_noche": { "desde": "23:00", "hasta": "07:00" },
+  "alarmas": [ { "dias": [1, 2, 3, 4, 5], "hora": "07:30" } ],
+  "reposo_minutos": 3
+}
