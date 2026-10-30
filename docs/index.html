@@ -1,5 +1,10 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Demo de una pantalla para Google Nest Hub: hora, tiempo, calendario, aviso de lluvia, alarma y un cielo que sigue al sol.">
 <title>Nest Hub Screen</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -22,7 +27,8 @@
 :root[data-theme="dark"] {
   --bg: #0f1218; --fg: #e9ecf3; --muted: #9aa3b5; --line: #262c38; --panel: #171b24; --accent: #8ea2ff; --bezel: #050608; color-scheme: dark }
 
-html, body { background: var(--bg); color: var(--fg); }
+html, body { margin: 0; background: var(--bg); color: var(--fg); }
+*, *::before, *::after { box-sizing: border-box; }
 body { font-family: var(--body); font-size: 16px; line-height: 1.55;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -121,7 +127,8 @@ code { font-family: var(--mono); font-size: .88em; background: var(--panel); bor
 }
 @media (prefers-reduced-motion: reduce) { .sky, .sun, .day, .night { transition: none; } }
 </style>
-
+</head>
+<body>
 <div class="page">
   <header>
     <span class="eyebrow">Nest Hub · 1024 × 600 · datos de ejemplo</span>
@@ -359,3 +366,5 @@ code { font-family: var(--mono); font-size: .88em; background: var(--panel); bor
   render(+range.value);
 })();
 </script>
+</body>
+</html>

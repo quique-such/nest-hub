@@ -2,6 +2,8 @@
 
 Una pantalla para el Google Nest Hub que se envía desde un Mac: hora, tiempo, calendario de iCloud, aviso de lluvia, próxima alarma y un fondo que sigue el color del cielo a lo largo del día.
 
+**[Ver la demo →](https://quique-such.github.io/nest-hub/)** Puedes mover la hora para ver el modo despertar, el aviso de lluvia, el atardecer y el modo noche.
+
 - **Cielo que sigue al sol:** el fondo pasa por amanecer, día, atardecer y noche con las horas reales de salida y puesta de sol de tu ciudad.
 - **Modo noche:** reloj ámbar tenue para no molestar al dormir.
 - **Modo despertar:** 30 minutos antes de una alarma, un amanecer artificial y "Buenos días".
@@ -41,6 +43,7 @@ Para quitarlo: `./instalar.sh --quitar`.
 
 ## Cómo funciona
 
+- `docs/index.html`: la demo con datos de ejemplo (GitHub Pages).
 - `index.html`: la pantalla. Corre en el propio Nest Hub y pide el tiempo directamente a Open-Meteo.
 - `src/calendario.swift`: exporta los eventos de hoy y mañana de Calendario a `eventos.json`.
 - `guardian.sh`: cada 5 minutos actualiza el calendario. Cada minuto mira qué muestra el Nest Hub y, si lleva `reposo_minutos` en reposo, le vuelve a enviar la pantalla con `catt cast_site`.
