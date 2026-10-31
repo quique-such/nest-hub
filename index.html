@@ -50,7 +50,7 @@
   .empty { font-size: calc(1.9 * var(--u)); opacity: .6; }
   .sep { height: 1px; background: rgba(255,255,255,.14); flex: none; }
   .foot { margin-top: auto; font-size: calc(1.6 * var(--u)); opacity: .6; display: flex; flex-wrap: wrap; column-gap: calc(2 * var(--u)); row-gap: calc(.6 * var(--u)); font-variant-numeric: tabular-nums; }
-  .foot span:first-child { opacity: 1; font-weight: 600; }
+  .foot .al { flex-basis: 100%; opacity: 1; font-weight: 600; }  /* la alarma en su propia línea; amanecer y anochecer juntos debajo */
 
   .night { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(1.6 * var(--u)); opacity: 0; transition: opacity 2s ease; }
   .night .clock { font-size: calc(19 * var(--u)); color: #d39258; }
@@ -290,7 +290,7 @@
     $('rain').innerHTML = rain ? UMBRELLA + rain : '';
 
     const alarm = nextAlarm(now);
-    const alarmHtml = alarm ? `<span>${BELL}Alarma ${alarm}</span>` : '';
+    const alarmHtml = alarm ? `<span class="al">${BELL}Alarma ${alarm}</span>` : '';
     $('sunFoot').innerHTML = alarmHtml +
       `<span>Amanece ${pad(Math.floor(sunrise / 60))}:${pad(sunrise % 60)}</span><span>Anochece ${pad(Math.floor(sunset / 60))}:${pad(sunset % 60)}</span>`;
     let nmeta = alarmHtml;

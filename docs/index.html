@@ -81,7 +81,7 @@ h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 5vw, 
 .rain[hidden] { display: none; }
 .list { display: flex; flex-direction: column; gap: 1.4cqw; }
 .foot { margin-top: auto; font-size: 1.6cqw; opacity: .6; display: flex; flex-wrap: wrap; column-gap: 2cqw; row-gap: .6cqw; font-variant-numeric: tabular-nums; }
-.foot span:first-child { opacity: 1; font-weight: 600; }
+.foot .al { flex-basis: 100%; opacity: 1; font-weight: 600; }  /* la alarma en su propia línea; amanecer y anochecer juntos debajo */
 .bell { width: 1.2em; height: 1.2em; vertical-align: -.22em; margin-right: .35em; }
 .night { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.6cqw; color: #c98a52; opacity: 0; transition: opacity .8s ease; }
 .night .clock { font-size: 19cqw; font-weight: 300; color: #d39258; }
@@ -354,7 +354,7 @@ code { font-family: var(--mono); font-size: .88em; background: var(--panel); bor
     ).join('');
 
     // Viernes: la próxima alarma es hoy a las 07:30 o, si ya pasó, el lunes
-    const alarm = `<span>${BELL}Alarma ${m < ALARM ? 'hoy' : 'lunes'} 07:30</span>`;
+    const alarm = `<span class="al">${BELL}Alarma ${m < ALARM ? 'hoy' : 'lunes'} 07:30</span>`;
     $('foot').innerHTML = alarm + `<span>Amanece ${fmt(SUNRISE)}</span><span>Anochece ${fmt(SUNSET)}</span>`;
     $('nmeta').innerHTML = alarm + `<span>${w.temp}° ahora</span><span>Mañana 20° · soleado</span>`;
   }
