@@ -377,7 +377,10 @@
 
   render();
   loadConfig(); loadEvents();
-  setInterval(render, 15 * 1000);
+  // Repinta justo al empezar cada minuto, para que el reloj cambie a su hora
+  (function tick() {
+    setTimeout(() => { render(); tick(); }, 60000 - (Date.now() % 60000) + 50);
+  })();
   setInterval(loadWeather, 15 * 60 * 1000);
   setInterval(loadEvents, 5 * 60 * 1000);
   setTimeout(safeReload, 6 * 60 * 60 * 1000);
