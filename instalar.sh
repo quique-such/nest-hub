@@ -37,7 +37,7 @@ cat > "$LA/com.nesthub.servidor.plist" <<EOF
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
   <key>Label</key><string>com.nesthub.servidor</string>
-  <key>ProgramArguments</key><array><string>$(command -v python3)</string><string>-m</string><string>http.server</string><string>8765</string><string>--bind</string><string>0.0.0.0</string></array>
+  <key>ProgramArguments</key><array><string>$(command -v python3)</string><string>$DIR/servidor.py</string><string>8765</string></array>
   <key>WorkingDirectory</key><string>$DIR</string>
   <key>RunAtLoad</key><true/><key>KeepAlive</key><true/>
   <key>StandardOutPath</key><string>/dev/null</string>
