@@ -103,7 +103,7 @@
 <script>
 (() => {
   // Todo lo personal se lee de config.json (ver config.example.json)
-  let NAME = '', LAT = 0, LON = 0, TZ = 'Europe/Madrid';
+  let NAME = '', LAT = null, LON = null, TZ = 'Europe/Madrid';
   let NIGHT_ON = 23 * 60, NIGHT_OFF = 7 * 60;
   // Alarmas del Nest Hub (Google no deja leerlas, se apuntan en config.json).
   // days: 0 = domingo … 6 = sábado
@@ -323,6 +323,7 @@
 
   // ---------- Datos ----------
   async function loadWeather() {
+    if (!configured) return;   // sin ciudad no se pide el tiempo
     try {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
         '&current=temperature_2m,weather_code,is_day&hourly=temperature_2m,weather_code,is_day,precipitation_probability,precipitation' +
@@ -341,22 +342,45 @@
     } catch (e) { /* se reintenta */ }
   }
 
-  async function start() {
+  // La configuración se guarda en el navegador del Nest Hub: si el Mac se
+  // duerme justo al cargar la página, se usa la última copia buena.
+  let configured = false;
+  const CONFIG_KEY = 'nesthub-config';
+  async function loadConfig() {
     try {
-      applyConfig(await (await fetch('config.json?t=' + Date.now())).json());
+      const c = await (await fetch('config.json?t=' + Date.now())).json();
+      applyConfig(c);
+      configured = true;
+      try { localStorage.setItem(CONFIG_KEY, JSON.stringify(c)); } catch (e) {}
     } catch (e) {
-      $('nowCond').textContent = 'Falta config.json (copia config.example.json)';
+      try {
+        const saved = JSON.parse(localStorage.getItem(CONFIG_KEY));
+        if (saved) { applyConfig(saved); configured = true; }
+      } catch (e2) {}
     }
-    render();
-    loadWeather(); loadEvents();
+    if (configured) { render(); loadWeather(); }
+    else {
+      $('nowCond').textContent = 'Esperando la configuración…';
+      setTimeout(loadConfig, 60 * 1000);
+    }
   }
 
-  start();
+  // Recarga completa cada 6 h para coger cambios en la página, pero solo si
+  // el Mac responde; si está dormido, la pantalla sigue y se reintenta.
+  async function safeReload() {
+    try {
+      const r = await fetch('index.html?t=' + Date.now(), { cache: 'no-store' });
+      if (r.ok) { location.reload(); return; }
+    } catch (e) {}
+    setTimeout(safeReload, 10 * 60 * 1000);
+  }
+
+  render();
+  loadConfig(); loadEvents();
   setInterval(render, 15 * 1000);
   setInterval(loadWeather, 15 * 60 * 1000);
   setInterval(loadEvents, 5 * 60 * 1000);
-  // Recarga completa cada 6 h para coger cambios en la página
-  setTimeout(() => location.reload(), 6 * 60 * 60 * 1000);
+  setTimeout(safeReload, 6 * 60 * 60 * 1000);
 })();
 </script>
 </body>
