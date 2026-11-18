@@ -11,3 +11,5 @@ guardian-launcher
 # Borradores locales
 preview.html
 guardian.new
+# Petición de envío inmediato (la borra el guardián)
+enviar-ahora

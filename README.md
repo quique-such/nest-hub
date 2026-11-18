@@ -47,7 +47,7 @@ Para quitarlo: `./instalar.sh --quitar`.
 - `docs/index.html`: la demo con datos de ejemplo (GitHub Pages).
 - `index.html`: la pantalla. Corre en el propio Nest Hub y pide el tiempo directamente a Open-Meteo.
 - `src/calendario.swift`: exporta los eventos de hoy y mañana de Calendario a `eventos.json`.
-- `guardian.sh`: cada 5 minutos actualiza el calendario. Cada minuto mira qué muestra el Nest Hub y, si lleva `reposo_minutos` en reposo, le vuelve a enviar la pantalla con `catt cast_site`.
+- `guardian.sh`: cada 5 minutos actualiza el calendario. Cada minuto mira qué muestra el Nest Hub y, si lleva `reposo_minutos` en reposo, le vuelve a enviar la pantalla con `catt cast_site`. Para forzar un envío sin esperar (por ejemplo, tras cambiar la página): `touch enviar-ahora` en la carpeta del proyecto. Sale en menos de un minuto y corta lo que esté sonando.
 - `src/guardian-launcher.swift`: arranca `guardian.sh` para que macOS atribuya los permisos de Red local y Calendario a un programa con nombre propio. Si lo recompilas, macOS vuelve a pedir el permiso.
 - `servidor.py`: el servidor web de la página, que pide al Nest Hub no guardar copias para que siempre cargue la última versión.
 - `instalar.sh`: compila los programas y crea dos servicios de launchd, el servidor web (puerto 8765) y el guardián.

@@ -60,10 +60,18 @@ while true; do
     reposo=0
   fi
 
+  # Envío a petición: `touch enviar-ahora` en esta carpeta fuerza el envío en
+  # el siguiente ciclo, muestre lo que muestre el Nest Hub.
+  motivo="en reposo ($app)"
+  if [[ -e "$DIR/enviar-ahora" ]]; then
+    rm -f "$DIR/enviar-ahora"
+    [[ -n "$NEST" ]] && { reposo=$REPOSO_MIN; motivo="a petición"; }
+  fi
+
   if (( reposo >= REPOSO_MIN )); then
     reposo=0
     URL="http://$(ipconfig getifaddr en0):8765/"
-    log "Nest Hub en reposo ($app), envío la pantalla a $URL"
+    log "Nest Hub $motivo, envío la pantalla a $URL"
     # El primer envío a veces caduca mientras DashCast arranca y se queda en
     # "waiting for address": se reintenta con la app ya abierta y, si aun así
     # falla, se cierra para que el siguiente ciclo empiece limpio.
