@@ -14,6 +14,14 @@ class SinCache(http.server.SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         super().end_headers()
 
+    def log_message(self, fmt, *args):
+        # Solo se apunta cada carga de la página (no el calendario ni la
+        # configuración), para poder comprobar que el Nest Hub la ha pedido.
+        ruta = self.path.split("?")[0]
+        if ruta in ("/", "/index.html"):
+            with open("servidor.log", "a") as f:
+                f.write("%s %s %s\n" % (self.log_date_time_string(), self.client_address[0], self.path))
+
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.path.abspath(__file__)))

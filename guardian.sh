@@ -67,10 +67,18 @@ while true; do
     rm -f "$DIR/enviar-ahora"
     [[ -n "$NEST" ]] && { reposo=$REPOSO_MIN; motivo="a petición"; }
   fi
+  forzado=0; [[ "$motivo" == "a petición" ]] && forzado=1
 
   if (( reposo >= REPOSO_MIN )); then
     reposo=0
     URL="http://$(ipconfig getifaddr en0):8765/"
+    if (( forzado )); then
+      # Si la página ya está abierta, reenviar la misma dirección no la
+      # recarga: se cierra primero y se envía con una dirección distinta.
+      "$CATT" -d "$NEST" stop >/dev/null 2>&1
+      sleep 3
+      URL="$URL?v=$(date +%s)"
+    fi
     log "Nest Hub $motivo, envío la pantalla a $URL"
     # El primer envío a veces caduca mientras DashCast arranca y se queda en
     # "waiting for address": se reintenta con la app ya abierta y, si aun así
