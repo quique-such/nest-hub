@@ -49,39 +49,37 @@ h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 5vw, 
 .sun { position: absolute; width: 14cqw; height: 14cqw; border-radius: 50%; filter: blur(2.2cqw); opacity: .55; transition: left 1.2s ease, top 1.2s ease, background 1.2s ease, opacity 1.2s ease; }
 .scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,8,20,.38), rgba(5,8,20,.12) 60%, rgba(5,8,20,.28)); }
 
-.day { position: absolute; inset: 0; display: grid; grid-template-columns: 1.15fr 1fr; gap: 3cqw; padding: 4.2cqw 4.6cqw; transition: opacity .8s ease; }
-.left { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
-.clock { font-family: var(--display); font-weight: 300; font-size: 15.5cqw; line-height: .9; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
-.date { font-size: 2.7cqw; font-weight: 500; opacity: .9; margin-top: 1.2cqw; text-transform: capitalize; }
-.now { display: flex; align-items: center; gap: 2cqw; }
-.now svg { width: 7.5cqw; height: 7.5cqw; flex: none; }
-.now .temp { font-family: var(--display); font-size: 7cqw; font-weight: 500; line-height: 1; }
-.now .cond { font-size: 2.1cqw; opacity: .85; line-height: 1.35; }
-.hours { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1cqw; margin-top: 2.2cqw; }
-.hour { display: flex; flex-direction: column; align-items: center; gap: .5cqw; font-size: 1.7cqw; padding: 1cqw 0; border-radius: 1.4cqw; background: rgba(255,255,255,.1); font-variant-numeric: tabular-nums; }
-.hour svg { width: 3.4cqw; height: 3.4cqw; }
-.hour b { font-weight: 600; font-size: 2cqw; }
+.day { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 3.4cqw 4.6cqw 3.2cqw; transition: opacity .8s ease; }
+.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3cqw; }
+.clock { font-family: var(--display); font-weight: 300; font-size: 22cqw; line-height: .86; letter-spacing: -.045em; margin-left: -1cqw; font-variant-numeric: tabular-nums; }
+.date { font-size: 2.9cqw; font-weight: 500; line-height: 1.2; opacity: .92; margin-top: 1.4cqw; }
+.now { display: flex; flex-direction: column; align-items: flex-end; text-align: right; padding-top: 1.2cqw; min-width: 0; line-height: 1.2; }
+.now .big { display: flex; align-items: center; gap: 1.6cqw; }
+.now svg { width: 9.5cqw; height: 9.5cqw; flex: none; }
+.now .temp { font-family: var(--display); font-size: 11cqw; font-weight: 500; line-height: 1; letter-spacing: -.02em; }
+.now .cond { font-size: 2.5cqw; font-weight: 600; margin-top: 1cqw; }
+.now .range, .now .tmr { font-size: 2cqw; opacity: .85; margin-top: .5cqw; font-variant-numeric: tabular-nums; }
+.now .tmr { opacity: .65; }
 
-.right { display: flex; flex-direction: column; gap: 1.6cqw; min-width: 0; padding: 2.4cqw; border-radius: 2.4cqw;
-  background: rgba(8,12,28,.34); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.12); }
-.right h3 { margin: 0; font-family: var(--mono); font-weight: 500; font-size: 1.45cqw; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
-.ev { display: grid; grid-template-columns: 9cqw 1fr; gap: 1.4cqw; align-items: baseline; }
-.ev time { font-family: var(--mono); font-size: 1.8cqw; opacity: .85; font-variant-numeric: tabular-nums; }
-.ev .t { font-size: 2.15cqw; font-weight: 600; line-height: 1.2; display: flex; align-items: center; gap: 1cqw; }
-.ev .t i { width: 1.1cqw; height: 1.1cqw; border-radius: 50%; flex: none; }
-.ev .s { grid-column: 2; font-size: 1.6cqw; opacity: .7; margin-top: -.6cqw; }
-.ev.past { opacity: .45; }
-.sep { height: 1px; background: rgba(255,255,255,.14); }
-.alarm { margin-top: auto; display: flex; align-items: center; gap: 1.2cqw; font-size: 1.8cqw; opacity: .85; }
-.alarm svg { width: 2.4cqw; height: 2.4cqw; }
+.agenda { display: flex; gap: 2.6cqw; margin-bottom: 1.5cqw; overflow: hidden; line-height: 1.2; }
+.agenda[hidden] { display: none; }
+.ag { display: flex; align-items: center; gap: .9cqw; min-width: 0; font-size: 2cqw; }
+.ag i { width: 1.1cqw; height: 1.1cqw; border-radius: 50%; flex: none; }
+.ag time { font-family: var(--mono); font-size: 1.7cqw; opacity: .8; flex: none; font-variant-numeric: tabular-nums; }
+.ag span { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hours { display: grid; grid-template-columns: repeat(8, 1fr); gap: 1cqw; }
+.hour { display: flex; flex-direction: column; align-items: center; gap: .3cqw; font-size: 1.7cqw; line-height: 1.2; padding: .9cqw 0; border-radius: 1.4cqw; background: rgba(8,12,28,.3); font-variant-numeric: tabular-nums; }
+.hour svg { width: 3.6cqw; height: 3.6cqw; }
+.hour b { font-weight: 600; font-size: 2.2cqw; }
+.hour em { font-style: normal; font-weight: 600; font-size: 1.45cqw; min-height: 1.2em; color: #a9ccff; }
 
-.rain { display: inline-flex; align-items: center; gap: 1cqw; margin-top: 1.6cqw; padding: .7cqw 1.6cqw; border-radius: 99px;
+.rain { display: inline-flex; align-items: center; gap: 1cqw; margin-top: 1.4cqw; line-height: 1.2; padding: .7cqw 1.6cqw; border-radius: 99px;
   background: rgba(127,178,255,.22); border: 1px solid rgba(127,178,255,.45); font-size: 1.9cqw; font-weight: 600; }
 .rain svg { width: 2.6cqw; height: 2.6cqw; }
 .rain[hidden] { display: none; }
-.list { display: flex; flex-direction: column; gap: 1.4cqw; }
-.foot { margin-top: auto; font-size: 1.6cqw; opacity: .6; display: flex; flex-wrap: wrap; column-gap: 2cqw; row-gap: .6cqw; font-variant-numeric: tabular-nums; }
-.foot .al { flex-basis: 100%; opacity: 1; font-weight: 600; }  /* la alarma en su propia línea; amanecer y anochecer juntos debajo */
+.foot { margin-top: 1.5cqw; font-size: 1.7cqw; line-height: 1.2; display: flex; justify-content: flex-end; column-gap: 2.4cqw; font-variant-numeric: tabular-nums; }
+.foot span { opacity: .7; }
+.foot .al { opacity: 1; font-weight: 600; margin-right: auto; }  /* la alarma a la izquierda; amanecer y anochecer a la derecha */
 .bell { width: 1.2em; height: 1.2em; vertical-align: -.22em; margin-right: .35em; }
 .night { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.6cqw; color: #c98a52; opacity: 0; transition: opacity .8s ease; }
 .night .clock { font-size: 19cqw; font-weight: 300; color: #d39258; }
@@ -90,7 +88,7 @@ h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 5vw, 
 .screen.is-night .day { opacity: 0; }
 .screen.is-night .scrim { background: #000; }
 
-.badge { position: absolute; right: 1.6cqw; bottom: 1.4cqw; font-family: var(--mono); font-size: 1.2cqw; padding: .3cqw .9cqw; border-radius: 99px; background: rgba(0,0,0,.35); color: rgba(255,255,255,.75); }
+.badge { position: absolute; right: 1.6cqw; top: 1.4cqw; font-family: var(--mono); font-size: 1.2cqw; padding: .3cqw .9cqw; border-radius: 99px; background: rgba(0,0,0,.35); color: rgba(255,255,255,.75); }
 
 /* Control de hora */
 .control { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; }
@@ -144,31 +142,25 @@ code { font-family: var(--mono); font-size: .88em; background: var(--panel); bor
         <div class="scrim"></div>
 
         <div class="day">
-          <div class="left">
+          <div class="top">
             <div>
               <div class="clock" id="clock">--:--</div>
               <div class="date" id="date">Viernes, 30 de octubre</div>
               <div class="rain" id="rain" hidden></div>
             </div>
-            <div>
-              <div class="now">
+            <div class="now">
+              <div class="big">
                 <svg viewBox="0 0 48 48" id="nowIcon"></svg>
-                <div>
-                  <div class="temp" id="nowTemp">17°</div>
-                  <div class="cond" id="nowCond">Parcialmente nuboso<br>Máx 19° · Mín 11°</div>
-                </div>
+                <div class="temp" id="nowTemp">17°</div>
               </div>
-              <div class="hours" id="hours"></div>
+              <div class="cond" id="nowCond">Parcialmente nuboso</div>
+              <div class="range">Máx 19° · Mín 11°</div>
+              <div class="tmr">Mañana 20° / 12° · despejado</div>
             </div>
           </div>
-          <div class="right">
-            <h3>Hoy</h3>
-            <div class="list" id="events"></div>
-            <div class="sep"></div>
-            <h3>Mañana</h3>
-            <div class="list">
-              <div class="ev"><time></time><div class="t"><i style="background:#f2b84b"></i>Cumpleaños de Laura</div><div class="s">Todo el día · Cumpleaños</div></div>
-            </div>
+          <div>
+            <div class="agenda" id="agenda" hidden></div>
+            <div class="hours" id="hours"></div>
             <div class="foot" id="foot"></div>
           </div>
         </div>
@@ -202,17 +194,17 @@ code { font-family: var(--mono); font-size: .88em; background: var(--panel); bor
     <div class="grid">
       <div class="mod">
         <h4>Hora y fecha</h4>
-        <p>Reloj grande, legible desde la cama. De noche, en ámbar y con muy poco brillo.</p>
+        <p>El reloj ocupa media pantalla y se lee desde la otra punta de la habitación. De noche, en ámbar y con muy poco brillo.</p>
         <div class="src">Fuente: el propio Nest Hub</div>
       </div>
       <div class="mod">
         <h4>Tiempo y aviso de lluvia</h4>
-        <p>Temperatura actual, máxima, mínima y las próximas 5 horas. Si va a llover en las próximas 12 horas, sale un aviso debajo de la fecha.</p>
+        <p>Temperatura actual, máxima, mínima, la previsión de mañana y las próximas 8 horas con su probabilidad de lluvia. Si va a llover en las próximas 12 horas, sale un aviso debajo de la fecha.</p>
         <div class="src">Fuente: Open-Meteo · gratis y sin cuenta</div>
       </div>
       <div class="mod">
         <h4>Calendario del iPhone</h4>
-        <p>Los planes de hoy y de mañana, con el color de cada calendario. Los que ya han pasado se atenúan.</p>
+        <p>Lo que queda de hoy y lo de mañana en una sola línea, con el color de cada calendario. Si no hay nada apuntado, la línea desaparece.</p>
         <div class="src">Fuente: app Calendario del Mac · iCloud incluido, sin publicar enlaces</div>
       </div>
       <div class="mod">
@@ -261,9 +253,10 @@ code { font-family: var(--mono); font-size: .88em; background: var(--panel); bor
   const BELL = '<svg class="bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="7"/><path d="M12 10v3l2 2M5 4 3 6M19 4l2 2"/></svg>';
 
   const EVENTS = [
-    { end: 10 * 60 + 30, time: '09:30', title: 'Dentista', sub: '09:30–10:30 · Clínica Ortega', color: '#7fb2ff' },
-    { end: 19 * 60, time: '17:30', title: 'Pádel', sub: '17:30–19:00 · Pista 3', color: '#5fd39b' },
-    { end: 23 * 60, time: '21:00', title: 'Cena con la familia', sub: '21:00–23:00', color: '#ff8f7a' }
+    { start: 9 * 60 + 30, end: 10 * 60 + 30, title: 'Dentista', color: '#7fb2ff' },
+    { start: 17 * 60 + 30, end: 19 * 60, title: 'Pádel', color: '#5fd39b' },
+    { start: 21 * 60, end: 23 * 60, title: 'Cena con la familia', color: '#ff8f7a' },
+    { tomorrow: true, title: 'Cumpleaños de Laura', color: '#f2b84b' }
   ];
 
   // Colores del cielo [minuto del día, color arriba, color abajo, color del sol]
@@ -341,22 +334,25 @@ code { font-family: var(--mono); font-size: .88em; background: var(--panel); bor
     const w = weatherAt(m);
     $('nowIcon').innerHTML = ICON[w.icon];
     $('nowTemp').textContent = w.temp + '°';
-    $('nowCond').innerHTML = w.cond + '<br>Máx 19° · Mín 11°';
+    $('nowCond').textContent = w.cond;
     let hours = '';
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 8; i++) {
       const hm = (Math.floor(m / 60) + i) * 60 % 1440, hw = weatherAt(hm);
-      hours += `<div class="hour"><span>${String(hm / 60).padStart(2, '0')}h</span><svg viewBox="0 0 48 48">${ICON[hw.icon]}</svg><b>${hw.temp}°</b></div>`;
+      hours += `<div class="hour"><span>${String(hm / 60).padStart(2, '0')}h</span><svg viewBox="0 0 48 48">${ICON[hw.icon]}</svg><b>${hw.temp}°</b><em>${hw.icon === 'rain' ? '70 %' : ''}</em></div>`;
     }
     $('hours').innerHTML = hours;
 
-    $('events').innerHTML = EVENTS.map(e =>
-      `<div class="ev${m >= e.end ? ' past' : ''}"><time>${e.time}</time><div class="t"><i style="background:${e.color}"></i>${e.title}</div><div class="s">${e.sub}</div></div>`
+    // Lo que queda de hoy y lo de mañana, en una línea; sin planes, la línea no sale
+    const left = EVENTS.filter(e => e.tomorrow || m < e.end).slice(0, 3);
+    $('agenda').hidden = !left.length;
+    $('agenda').innerHTML = left.map(e =>
+      `<div class="ag"><i style="background:${e.color}"></i><time>${e.tomorrow ? 'Mañana' : m >= e.start ? 'Ahora' : fmt(e.start)}</time><span>${e.title}</span></div>`
     ).join('');
 
     // Viernes: la próxima alarma es hoy a las 07:30 o, si ya pasó, el lunes
     const alarm = `<span class="al">${BELL}Alarma ${m < ALARM ? 'hoy' : 'lunes'} 07:30</span>`;
     $('foot').innerHTML = alarm + `<span>Amanece ${fmt(SUNRISE)}</span><span>Anochece ${fmt(SUNSET)}</span>`;
-    $('nmeta').innerHTML = alarm + `<span>${w.temp}° ahora</span><span>Mañana 20° · soleado</span>`;
+    $('nmeta').innerHTML = alarm + `<span>${w.temp}° ahora</span><span>Mañana 20° · despejado</span>`;
   }
 
   const now = new Date();

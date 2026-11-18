@@ -7,8 +7,9 @@ Una pantalla para el Google Nest Hub que se envía desde un Mac: hora, tiempo, c
 - **Cielo que sigue al sol:** el fondo pasa por amanecer, día, atardecer y noche con las horas reales de salida y puesta de sol de tu ciudad.
 - **Modo noche:** reloj ámbar tenue para no molestar al dormir.
 - **Modo despertar:** 30 minutos antes de una alarma, un amanecer artificial y "Buenos días".
-- **Calendario del iPhone:** se lee de la app Calendario del Mac (cualquier cuenta sincronizada, iCloud incluida), sin publicar ningún enlace.
-- **Aviso de lluvia** en las próximas 12 horas y previsión por horas ([Open-Meteo](https://open-meteo.com), sin clave).
+- **Hora y tiempo primero:** el reloj y la temperatura ocupan casi toda la pantalla, con la previsión de mañana.
+- **Calendario del iPhone:** una sola línea con lo que queda de hoy y lo de mañana, que solo aparece si hay algo apuntado. Se lee de la app Calendario del Mac (cualquier cuenta sincronizada, iCloud incluida), sin publicar ningún enlace.
+- **Aviso de lluvia** en las próximas 12 horas y previsión de las próximas 8 horas con probabilidad de lluvia ([Open-Meteo](https://open-meteo.com), sin clave).
 - **No molesta:** si el Nest Hub está con Spotify, YouTube o una alarma, no se toca. La pantalla vuelve sola cuando lleva unos minutos en reposo.
 
 ## Requisitos

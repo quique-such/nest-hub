@@ -19,38 +19,38 @@
   .sun { position: absolute; width: calc(14 * var(--u)); height: calc(14 * var(--u)); border-radius: 50%; filter: blur(calc(2.2 * var(--u))); opacity: .55; transition: all 60s linear; }
   .scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,8,20,.38), rgba(5,8,20,.12) 60%, rgba(5,8,20,.28)); transition: background 2s ease; }
 
-  .day { position: absolute; inset: 0; display: grid; grid-template-columns: 1.15fr 1fr; gap: calc(3 * var(--u)); padding: calc(4.2 * var(--u)) calc(4.6 * var(--u)); transition: opacity 2s ease; }
-  .left { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
-  .clock { font-family: var(--display); font-weight: 300; font-size: calc(15.5 * var(--u)); line-height: .9; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
-  .date { font-size: calc(2.7 * var(--u)); font-weight: 500; opacity: .9; margin-top: calc(1.2 * var(--u)); }
-  .rain { display: inline-flex; align-items: center; gap: var(--u); margin-top: calc(1.6 * var(--u)); padding: calc(.7 * var(--u)) calc(1.6 * var(--u));
+  /* De día: arriba la hora y el tiempo de ahora; abajo las próximas horas.
+     La agenda es una sola línea que solo aparece si hay algo apuntado. */
+  .day { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: calc(3.4 * var(--u)) calc(4.6 * var(--u)) calc(3.2 * var(--u)); transition: opacity 2s ease; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: calc(3 * var(--u)); }
+  .clock { font-family: var(--display); font-weight: 300; font-size: calc(22 * var(--u)); line-height: .86; letter-spacing: -.045em; margin-left: calc(-1 * var(--u)); font-variant-numeric: tabular-nums; }
+  .date { font-size: calc(2.9 * var(--u)); font-weight: 500; opacity: .92; margin-top: calc(1.4 * var(--u)); }
+  .rain { display: inline-flex; align-items: center; gap: var(--u); margin-top: calc(1.4 * var(--u)); padding: calc(.7 * var(--u)) calc(1.6 * var(--u));
     border-radius: 99px; background: rgba(127,178,255,.22); border: 1px solid rgba(127,178,255,.45); font-size: calc(1.9 * var(--u)); font-weight: 600; }
   .rain svg { width: calc(2.6 * var(--u)); height: calc(2.6 * var(--u)); }
   .rain[hidden] { display: none; }
-  .now { display: flex; align-items: center; gap: calc(2 * var(--u)); }
-  .now svg { width: calc(7.5 * var(--u)); height: calc(7.5 * var(--u)); flex: none; }
-  .now .temp { font-family: var(--display); font-size: calc(7 * var(--u)); font-weight: 500; line-height: 1; }
-  .now .cond { font-size: calc(2.1 * var(--u)); opacity: .85; line-height: 1.35; }
-  .hours { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--u); margin-top: calc(2.2 * var(--u)); }
-  .hour { display: flex; flex-direction: column; align-items: center; gap: calc(.5 * var(--u)); font-size: calc(1.7 * var(--u)); padding: var(--u) 0; border-radius: calc(1.4 * var(--u)); background: rgba(255,255,255,.1); font-variant-numeric: tabular-nums; }
-  .hour svg { width: calc(3.4 * var(--u)); height: calc(3.4 * var(--u)); }
-  .hour b { font-weight: 600; font-size: calc(2 * var(--u)); }
+  .now { display: flex; flex-direction: column; align-items: flex-end; text-align: right; padding-top: calc(1.2 * var(--u)); min-width: 0; }
+  .now .big { display: flex; align-items: center; gap: calc(1.6 * var(--u)); }
+  .now svg { width: calc(9.5 * var(--u)); height: calc(9.5 * var(--u)); flex: none; }
+  .now .temp { font-family: var(--display); font-size: calc(11 * var(--u)); font-weight: 500; line-height: 1; letter-spacing: -.02em; }
+  .now .cond { font-size: calc(2.5 * var(--u)); font-weight: 600; margin-top: calc(1 * var(--u)); }
+  .now .range, .now .tmr { font-size: calc(2 * var(--u)); opacity: .85; margin-top: calc(.5 * var(--u)); font-variant-numeric: tabular-nums; }
+  .now .tmr { opacity: .65; }
 
-  .right { display: flex; flex-direction: column; gap: calc(1.6 * var(--u)); min-width: 0; padding: calc(2.4 * var(--u)); border-radius: calc(2.4 * var(--u));
-    background: rgba(8,12,28,.4); border: 1px solid rgba(255,255,255,.12); overflow: hidden; }
-  .right h3 { margin: 0; font-family: var(--mono); font-weight: 500; font-size: calc(1.45 * var(--u)); letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
-  .list { display: flex; flex-direction: column; gap: calc(1.4 * var(--u)); }
-  .ev { display: grid; grid-template-columns: calc(9 * var(--u)) 1fr; column-gap: calc(1.4 * var(--u)); align-items: baseline; }
-  .ev time { font-family: var(--mono); font-size: calc(1.8 * var(--u)); opacity: .85; font-variant-numeric: tabular-nums; }
-  .ev .t { font-size: calc(2.15 * var(--u)); font-weight: 600; line-height: 1.2; display: flex; align-items: center; gap: var(--u); min-width: 0; }
-  .ev .t span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .ev .t i { width: calc(1.1 * var(--u)); height: calc(1.1 * var(--u)); border-radius: 50%; flex: none; }
-  .ev .s { grid-column: 2; font-size: calc(1.6 * var(--u)); opacity: .7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .ev.past { opacity: .45; }
-  .empty { font-size: calc(1.9 * var(--u)); opacity: .6; }
-  .sep { height: 1px; background: rgba(255,255,255,.14); flex: none; }
-  .foot { margin-top: auto; font-size: calc(1.6 * var(--u)); opacity: .6; display: flex; flex-wrap: wrap; column-gap: calc(2 * var(--u)); row-gap: calc(.6 * var(--u)); font-variant-numeric: tabular-nums; }
-  .foot .al { flex-basis: 100%; opacity: 1; font-weight: 600; }  /* la alarma en su propia línea; amanecer y anochecer juntos debajo */
+  .agenda { display: flex; gap: calc(2.6 * var(--u)); margin-bottom: calc(1.5 * var(--u)); overflow: hidden; }
+  .agenda[hidden] { display: none; }
+  .ag { display: flex; align-items: center; gap: calc(.9 * var(--u)); min-width: 0; font-size: calc(2 * var(--u)); }
+  .ag i { width: calc(1.1 * var(--u)); height: calc(1.1 * var(--u)); border-radius: 50%; flex: none; }
+  .ag time { font-family: var(--mono); font-size: calc(1.7 * var(--u)); opacity: .8; flex: none; font-variant-numeric: tabular-nums; }
+  .ag span { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hours { display: grid; grid-template-columns: repeat(8, 1fr); gap: var(--u); }
+  .hour { display: flex; flex-direction: column; align-items: center; gap: calc(.3 * var(--u)); font-size: calc(1.7 * var(--u)); line-height: 1.2; padding: calc(.9 * var(--u)) 0; border-radius: calc(1.4 * var(--u)); background: rgba(8,12,28,.3); font-variant-numeric: tabular-nums; }
+  .hour svg { width: calc(3.6 * var(--u)); height: calc(3.6 * var(--u)); }
+  .hour b { font-weight: 600; font-size: calc(2.2 * var(--u)); }
+  .hour em { font-style: normal; font-weight: 600; font-size: calc(1.45 * var(--u)); min-height: 1.2em; color: #a9ccff; }
+  .foot { margin-top: calc(1.5 * var(--u)); font-size: calc(1.7 * var(--u)); display: flex; justify-content: flex-end; column-gap: calc(2.4 * var(--u)); font-variant-numeric: tabular-nums; }
+  .foot span { opacity: .7; }
+  .foot .al { opacity: 1; font-weight: 600; margin-right: auto; }  /* la alarma a la izquierda; amanecer y anochecer a la derecha */
 
   .night { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(1.6 * var(--u)); opacity: 0; transition: opacity 2s ease; }
   .night .clock { font-size: calc(19 * var(--u)); color: #d39258; }
@@ -67,29 +67,25 @@
   <div class="scrim"></div>
 
   <div class="day">
-    <div class="left">
+    <div class="top">
       <div>
         <div class="clock" id="clock">--:--</div>
         <div class="date" id="date"></div>
         <div class="rain" id="rain" hidden></div>
       </div>
-      <div>
-        <div class="now">
+      <div class="now">
+        <div class="big">
           <svg viewBox="0 0 48 48" id="nowIcon"></svg>
-          <div>
-            <div class="temp" id="nowTemp">--°</div>
-            <div class="cond" id="nowCond">Cargando el tiempo…</div>
-          </div>
+          <div class="temp" id="nowTemp">--°</div>
         </div>
-        <div class="hours" id="hours"></div>
+        <div class="cond" id="nowCond">Cargando el tiempo…</div>
+        <div class="range" id="nowRange"></div>
+        <div class="tmr" id="nowTmr"></div>
       </div>
     </div>
-    <div class="right">
-      <h3>Hoy</h3>
-      <div class="list" id="today"></div>
-      <div class="sep"></div>
-      <h3>Mañana</h3>
-      <div class="list" id="tomorrow"></div>
+    <div>
+      <div class="agenda" id="agenda" hidden></div>
+      <div class="hours" id="hours"></div>
       <div class="foot" id="sunFoot"></div>
     </div>
   </div>
@@ -184,16 +180,18 @@
     if (b) t = 'Cumpleaños de ' + b[1];
     return t.replace(/\s*\([^)]*\)/g, '').trim();
   }
-  function renderList(el, list, now) {
-    if (!list.length) { el.innerHTML = '<div class="empty">Sin planes</div>'; return; }
-    el.innerHTML = list.slice(0, 4).map(e => {
-      const s = new Date(e.start), en = new Date(e.end);
-      const time = e.allDay ? 'Todo el día' : hm(s);
-      const sub = [e.allDay ? '' : hm(s) + '–' + hm(en), e.location].filter(Boolean).join(' · ') || e.calendar;
-      const past = !e.allDay && en < now;
-      return `<div class="ev${past ? ' past' : ''}"><time>${e.allDay ? '' : time}</time>` +
-        `<div class="t"><i style="background:${e.color}"></i><span>${esc(cleanTitle(e))}</span></div>` +
-        `<div class="s">${esc(e.allDay ? 'Todo el día · ' + e.calendar : sub)}</div></div>`;
+  // Lo que queda de hoy y, si cabe, lo de mañana: como mucho tres, en una línea
+  function renderAgenda(now) {
+    const tm = new Date(now); tm.setDate(tm.getDate() + 1);
+    const today = eventsOn(now).filter(e => e.allDay || new Date(e.end) > now);
+    const items = today.map(e => [e, false])
+      .concat(eventsOn(tm).filter(e => !today.includes(e)).map(e => [e, true])).slice(0, 3);
+    const el = $('agenda');
+    el.hidden = !items.length;
+    el.innerHTML = items.map(([e, tmr]) => {
+      const s = new Date(e.start);
+      const when = e.allDay ? (tmr ? 'Mañana' : 'Hoy') : tmr ? 'Mañana ' + hm(s) : s <= now ? 'Ahora' : hm(s);
+      return `<div class="ag"><i style="background:${esc(e.color || '#fff')}"></i><time>${when}</time><span>${esc(cleanTitle(e))}</span></div>`;
     }).join('');
   }
   function eventsOn(day) {
@@ -295,27 +293,28 @@
       `<span>Amanece ${pad(Math.floor(sunrise / 60))}:${pad(sunrise % 60)}</span><span>Anochece ${pad(Math.floor(sunset / 60))}:${pad(sunset % 60)}</span>`;
     let nmeta = alarmHtml;
 
-    renderList($('today'), eventsOn(now), now);
-    const tm = new Date(now); tm.setDate(tm.getDate() + 1);
-    renderList($('tomorrow'), eventsOn(tm), now);
+    renderAgenda(now);
 
     if (weather) {
       const cur = weather.current;
       const [icon, label] = describe(cur.weather_code, cur.is_day);
       $('nowIcon').innerHTML = ICON[icon];
       $('nowTemp').textContent = Math.round(cur.temperature_2m) + '°';
-      $('nowCond').innerHTML = `${label}<br>Máx ${Math.round(weather.daily.temperature_2m_max[0])}° · Mín ${Math.round(weather.daily.temperature_2m_min[0])}°`;
+      const dl = weather.daily, tmr = describe(dl.weather_code[1], 1)[1].toLowerCase();
+      $('nowCond').textContent = label;
+      $('nowRange').textContent = `Máx ${Math.round(dl.temperature_2m_max[0])}° · Mín ${Math.round(dl.temperature_2m_min[0])}°`;
+      $('nowTmr').textContent = `Mañana ${Math.round(dl.temperature_2m_max[1])}° / ${Math.round(dl.temperature_2m_min[1])}° · ${tmr}`;
       const h = weather.hourly, startH = new Date(now); startH.setMinutes(0, 0, 0);
       let html = '', shown = 0;
-      for (let i = 0; i < h.time.length && shown < 5; i++) {
+      for (let i = 0; i < h.time.length && shown < 8; i++) {
         const ht = new Date(h.time[i]);
         if (ht <= startH) continue;
         const [hi] = describe(h.weather_code[i], h.is_day[i]);
-        html += `<div class="hour"><span>${pad(ht.getHours())}h</span><svg viewBox="0 0 48 48">${ICON[hi]}</svg><b>${Math.round(h.temperature_2m[i])}°</b></div>`;
+        const rainP = h.precipitation_probability[i];
+        html += `<div class="hour"><span>${pad(ht.getHours())}h</span><svg viewBox="0 0 48 48">${ICON[hi]}</svg><b>${Math.round(h.temperature_2m[i])}°</b><em>${rainP >= 20 ? rainP + ' %' : ''}</em></div>`;
         shown++;
       }
       $('hours').innerHTML = html;
-      const tmr = describe(weather.daily.weather_code[1], 1)[1].toLowerCase();
       nmeta += `<span>${Math.round(cur.temperature_2m)}° ahora</span><span>Mañana ${Math.round(weather.daily.temperature_2m_max[1])}° · ${tmr}</span>`;
     }
     $('nmeta').innerHTML = nmeta;
